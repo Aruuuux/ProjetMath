@@ -1,3 +1,6 @@
+__author__ = "ANTROPIUS Simon, AUGEY Louis"
+__date__ = "2024-05-13"
+
 import numpy as np
 import matplotlib.pyplot as plt
 
