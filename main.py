@@ -69,18 +69,34 @@ def runge_kutta_method(t, f, y0):
         x[i+1] = x[i] + h
     return y
 
+def error_euler_runge_kutta(f_euler, f_runge_kutta):
+    '''
+    input : f_euler (np.array) : numerical solution of the euler method
+            f_runge_kutta (np.array) : numerical solution of the runge-kutta method
+    output : np.abs(f_euler - f_runge_kutta) (np.array) : error between the two methods
+    '''
+    return np.abs(f_euler - f_runge_kutta)
+
 # Compute
 analytic_function = f_real(k, y0, x)
 y_euler = euler_method(t, f, y0)
 y_runge_kutta = runge_kutta_method(t, f, y0)
+y_error = error_euler_runge_kutta(y_euler, y_runge_kutta)
 
 # Plot
+plt.subplot(1,2,1)
 plt.plot(t, analytic_function, label='Analytical')
 plt.plot(t, y_euler, label='Euler')
 plt.plot(t, y_runge_kutta, label='Runge-Kutta')
 plt.title(f"Approximated and exact solutions of the ODE y\' = -{k}*y with y(0) = 5")
 plt.grid()
-plt.xlabel('t')
+plt.xlabel('t in second')
 plt.ylabel('y(t)')  
 plt.legend()
+plt.subplot(1,2,2)
+plt.plot(t, y_error)
+plt.title(f"Error between Euler and Runge-Kutta methods")
+plt.grid()
+plt.xlabel('t in second')
+plt.ylabel('y(t)')
 plt.show()
