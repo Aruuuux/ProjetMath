@@ -27,12 +27,15 @@ def f(x, y, z):
     """
     g = 9.81
     l = 0.5
+    # Replace the return by:
+    # -(g/l)*np.sin(y) - 0.2*z for an example of damped oscillator
+    # -(g/l)*np.sin(y) + 0.2*np.sin(0.15*x) for an example of forced oscillator
     return -(g/l)*np.sin(y)
 
 # Initial conditions
 x0 = 0 # Initial value of x
-y0 = np.pi/6 # Initial value of y (i.e. f(x0))
-z0 = np.pi/4 # Initial value of y' (i.e. f'(x0))
+y0 = np.pi/100 # Initial value of y (i.e. f(x0))
+z0 = -0.5 # Initial value of y' (i.e. f'(x0))
 
 ##### Euler's solution ########################################################
 
@@ -55,7 +58,7 @@ def euler_method_second_order(f, x, y0, z0):
     y[0] = y0
     z[0] = z0
     for i in range(1, n):
-        z[i] = z[i - 1] + h * f(x[i - 1], y[i - 1], z[i - 1])
+        z[i] = z[i-1] + h * f(x[i-1], y[i-1], z[i-1])
         y[i] = y[i-1] + h * z[i]
     return y
 
@@ -63,21 +66,21 @@ def euler_method_second_order(f, x, y0, z0):
 
 def analytical_solution(x):
     """
-
     Solution of the ODE y''(x) = -a(x)*y'(x) + b(x)y(x) + c(x).
     Define the solution to the equation here.
 
     :param x: The array containing the values of x.
     :return: An array containing the exact values of y.
     """
-    return y0*np.cos(np.sqrt(9.81/0.5)*x+np.arcsin(1/(y0*np.sqrt(9.81/0.5))))
+    return y0*np.cos(np.sqrt(9.81/0.5)*(x-x0)) + z0*np.sqrt(0.5/9.81)*np.sin(
+        np.sqrt(9.81/0.5)*(x-x0))
 
 ##### Computations ############################################################
 
 # Interval
 a = x0 # Beginning of the interval
 b = 10 # End of the interval
-n = 1000  # Number of steps
+n = 10000  # Number of steps
 
 x = np.linspace(a, b, n)
 y_analytical = analytical_solution(x)
@@ -89,8 +92,8 @@ plt.plot(x, y_analytical, label='Exact solution')
 plt.plot(x, y_euler, label='Approximated solution (Euler)')
 plt.xlabel('x')
 plt.ylabel('y')
-plt.title(f"Approximated and exact solution of d^2y/dx^2 = -(g/l)*sin(y)using "
-          f"Euler\'s Method")
+plt.title(f"Approximated and exact solution of d^2y/dx^2 = -(g/l)*sin(y) "
+          f"using Euler\'s Method")
 plt.legend()
 plt.grid(True)
 

@@ -53,10 +53,10 @@ def runge_kutta_method(f, x, y0):
     :return: An array containing the approximation of y.
     """
     n = len(x) # Number of steps
+    h = x[1] - x[0]  # Step size
     y = np.zeros(n)
     y[0] = y0
     for i in range(1, n):
-        h = x[i] - x[i-1]
         k1 = h * f(x[i-1], y[i-1])
         k2 = h * f(x[i-1], y[i-1] + k1/2)
         k3 = h * f(x[i-1], y[i-1] + k2/2)
@@ -96,7 +96,7 @@ def error_euler_runge_kutta(f_analytical, f_euler, f_runge_kutta):
 
 # Interval
 a = x0 # Beginning of the interval
-b = 10 # End of the interval
+b = 30 # End of the interval
 n = 1000  # Number of steps
 
 x = np.linspace(a, b, n)
