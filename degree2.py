@@ -93,6 +93,18 @@ def analytical_solution(x):
     return y0*np.cos(np.sqrt(9.81/0.5)*(x-x0)) + z0*np.sqrt(0.5/9.81)*np.sin(
         np.sqrt(9.81/0.5)*(x-x0))
 
+##### Error ###################################################################
+
+def error(y_euler, y_runge_kutta, y_analytical):
+    """
+    Computes the error between the analytical and the approximated solutions.
+
+    :param y_analytical: The array containing the exact values of y.
+    :param y_approximated: The array containing the approximated values of y.
+    :return: The array containing the errors.
+    """
+    return np.abs(y_euler - y_analytical), np.abs(y_runge_kutta - y_analytical)
+
 ##### Computations ############################################################
 
 # Interval
@@ -104,17 +116,25 @@ x = np.linspace(a, b, n)
 y_analytical = analytical_solution(x)
 y_euler = euler_method_second_order(f, x, y0, z0)
 y_runge_kutta = runge_kutta_second_order(f, x, y0, z0)
-
+y_error_runge_kutta,y_error_euler, = error(y_analytical,y_runge_kutta,y_euler)
 ##### Figure ##################################################################
 
-plt.plot(x, y_runge_kutta, label='Approximated solution (Runge-Kutta)')
-plt.plot(x, y_analytical, label='Exact solution')
-plt.plot(x, y_euler, label='Approximated solution (Euler)')
+plt.subplot(1, 2, 1)
+plt.plot(x, y_runge_kutta, label='Approximated solution (Runge-Kutta)', color='green')
+plt.plot(x, y_analytical, label='Exact solution', color='blue')
+plt.plot(x, y_euler, label='Approximated solution (Euler)', color='orange')
 plt.xlabel('x')
 plt.ylabel('y')
 plt.title(f"Approximated and exact solution of d^2y/dx^2 = -(g/l)*sin(y) "
-          f"using Euler\'s Method")
+          f"using Euler\'s Method and Runge-Kutta\'s Method")
 plt.legend()
 plt.grid(True)
-
+plt.subplot(1, 2, 2)    
+plt.plot(x, y_error_euler, label='Euler', color='orange')
+plt.plot(x, y_error_runge_kutta, label='Runge-Kutta', color='green')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title(f"Error between the exact solution and the approximated solution")
+plt.legend()
+plt.grid(True)
 plt.show()

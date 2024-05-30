@@ -110,9 +110,9 @@ y_error_euler, y_error_runge_kutta = error_euler_runge_kutta(y_analytical,
 
 ##### Figure ##################################################################
 plt.subplot(1, 2, 1)
-plt.plot(x, y_analytical, label='Exact solution')
-plt.plot(x, y_euler, label='Approximated solution (Euler)')
-plt.plot(x, y_runge_kutta, label='Approximated solution (Runge-Kutta)')
+plt.plot(x, y_analytical, label='Exact solution', color='blue')
+plt.plot(x, y_euler, label='Approximated solution (Euler)',color='orange')
+plt.plot(x, y_runge_kutta, label='Approximated solution (Runge-Kutta)', color='green')
 plt.xlabel('x')
 plt.ylabel('y')
 plt.title(f"Approximated and exact solution of dy/dx = -0.3*y using Euler\'s "
@@ -121,8 +121,8 @@ plt.legend()
 plt.grid(True)
 
 plt.subplot(1, 2, 2)
-plt.plot(x, y_error_euler, label='Euler')
-plt.plot(x, y_error_runge_kutta, label='Runge-Kutta')
+plt.plot(x, y_error_euler, label='Euler', color='orange')
+plt.plot(x, y_error_runge_kutta, label='Runge-Kutta', color='green')
 plt.xlabel('x')
 plt.ylabel('y')
 plt.title("Error between Euler/Runge-Kutta methods and the analytical "
