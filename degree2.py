@@ -62,6 +62,24 @@ def euler_method_second_order(f, x, y0, z0):
         y[i] = y[i-1] + h * z[i]
     return y
 
+##### Runge kutta #############################################################
+
+def runge_kutta_second_order(f, x, y0, z0):
+    n = len(x) # Number of steps
+    y = np.zeros(n)
+    z = np.zeros(n)
+    y[0] = y0
+    z[0]=z0
+    for i in range(n-1):  # Change here
+        h = x[i+1] - x[i]
+        k1 = f(x[i], y[i], z[i])
+        k2 = f(x[i]+h/2, y[i]+(h/2)*z[i], z[i]+(h/2)*k1)
+        k3 = f(x[i]+h/2, y[i]+(h/2)*z[i]+(h**2/4)*k1, z[i]+(h/2)*k2)
+        k4 = f(x[i]+h, y[i]+h*z[i]+(h**2/2)*k2, z[i]+h*k3)
+        y[i+1]= y[i]+h*z[i]+(h**2/6)*(k1+k2+k3)
+        z[i+1]= z[i]+(h/6)*(k1+2*k2+2*k3+k4)
+    return y
+
 ##### Exact solution ##########################################################
 
 def analytical_solution(x):
@@ -85,9 +103,11 @@ n = 10000  # Number of steps
 x = np.linspace(a, b, n)
 y_analytical = analytical_solution(x)
 y_euler = euler_method_second_order(f, x, y0, z0)
+y_runge_kutta = runge_kutta_second_order(f, x, y0, z0)
 
 ##### Figure ##################################################################
 
+plt.plot(x, y_runge_kutta, label='Approximated solution (Runge-Kutta)')
 plt.plot(x, y_analytical, label='Exact solution')
 plt.plot(x, y_euler, label='Approximated solution (Euler)')
 plt.xlabel('x')
